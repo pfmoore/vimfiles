@@ -9,6 +9,9 @@ set nocompatible
 " files will still have their encoding preserved.
 set encoding=utf-8
 
+" Use <SPACE> as the leader. Needs to be at the top, before any mappings.
+let mapleader=" "
+
 " Source a file relative to this one
 "source <sfile>:p:h/test.vim
 
@@ -122,6 +125,10 @@ let g:UltiSnipsSnippetsDir = "~/vimfiles/UltiSnips"
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
 endif
+
+" Personal mappings
+map <Leader>df :NERDTree %:p:h<CR>
+map <Leader>dc :NERDTree<CR>
 
 " Invoke the Solarized ToggleBG plugin
 "call togglebg#map("")
