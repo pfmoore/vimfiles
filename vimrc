@@ -12,13 +12,6 @@ set encoding=utf-8
 " Use <SPACE> as the leader. Needs to be at the top, before any mappings.
 let mapleader=" "
 
-" Source a file relative to this one
-"source <sfile>:p:h/test.vim
-
-" Pathogen
-"let g:pathogen_disabled = []
-"call pathogen#infect()
-
 " Neobundle configuration
 if has('vim_starting')
   " Required:
@@ -26,34 +19,76 @@ if has('vim_starting')
 endif
 
 " Required:
-call neobundle#rc(expand('~/vimfiles/bundle/'))
+call neobundle#begin(expand('~/vimfiles/bundle/'))
 
 " Let NeoBundle manage NeoBundle
-" Required:
 NeoBundleFetch 'Shougo/neobundle.vim'
 
-" My Bundles here:
-NeoBundle 'mbbill/undotree'
+" Some themes
 NeoBundle 'chriskempson/base16-vim'
-NeoBundle 'PProvost/vim-ps1'
-NeoBundle 'tpope/vim-surround'
+NeoBundle 'sjl/badwolf'
 NeoBundle 'altercation/vim-colors-solarized'
-NeoBundle 'kien/ctrlp.vim'
+" Huge jumbo pack
+" NeoBundle 'flazz/vim-colorschemes'
+
+" File types
+NeoBundle 'PProvost/vim-ps1'
+
+" Simple utilities
+" ----------------
+" Move lines up and down (A-J/A-k)
+NeoBundle 'matze/vim-move'
+" Surroundings - ds,cs,ys
+NeoBundle 'tpope/vim-surround'
+" Sneak mode - sxy (search for 2 chars)
+NeoBundle 'justinmk/vim-sneak'
+" Smart parentheses
+NeoBundle 'jiangmiao/auto-pairs'
+" Auto comment (gc)
+NeoBundle 'tpope/vim-commentary'
+" Various mappings around [] - Not convinced...
+NeoBundle 'tpope/vim-unimpaired'
+
+" Run command and capture output - :Clam
 NeoBundle 'https://bitbucket.org/sjl/clam.vim', {'type': 'hg'}
 
-NeoBundle 'matze/vim-move'
-NeoBundle 'scrooloose/nerdtree'
-NeoBundle 'SirVer/UltiSnips'
-NeoBundle 'mileszs/ack.vim'
+" Undo management
+" NeoBundle 'mbbill/undotree'
+" NeoBundle 'sjl/gundo.vim'
 
-" NeoBundle 'Shougo/neosnippet.vim'
-" NeoBundle 'Shougo/neosnippet-snippets.vim'
-" NeoBundle 'tpope/vim-fugitive.vim'
+" File managers
+" Fuzzy file search - not used (slow on big directories)
 " NeoBundle 'kien/ctrlp.vim'
-" NeoBundle 'flazz/vim-colorschemes'
+" Directory viewer window
+NeoBundle 'scrooloose/nerdtree'
+" Unified selection window (files, buffers, ...) - Too complex?...
+NeoBundle 'Shougo/unite.vim'
+
+" Snippet managers
+" Needs Python, maybe a bit heavyweight?
+" NeoBundle 'SirVer/UltiSnips'
+NeoBundle 'Shougo/neosnippet.vim'
+NeoBundle 'Shougo/neosnippet-snippets' " Predefined snippets
+
+" Tool integration
+NeoBundle 'mileszs/ack.vim'
+" NeoBundle 'tpope/vim-fugitive.vim'
+
+" Things still to look at
+" - Completion (Shougo/neocomplete.vim)
+" - Syntax checker (scrooloose/syntastic)
+" - Better status line (vim-airline/vim-airline)
+" - Python autocompletion (davidhalter/jedi-vim)
+
+call neobundle#end()
 
 " Required:
 filetype plugin indent on
+
+if !has('vim_starting')
+  " Call on_source hook when reloading .vimrc.
+  call neobundle#call_hook('on_source')
+endif
 
 " General settings
 set nowrap        " Horizontal scrolling rather than displaying lines wrapped
@@ -72,6 +107,9 @@ set smartcase           " unless the search string contains capitals
 
 " Completion menu
 set wildmenu            " Show a menu when completing on the command line
+
+" Don't require a save when switching buffers
+set hidden              " Hide buffers rather than unloading them
 
 " Indentation and tabs
 set shiftwidth=4        " indents each 4 characters
@@ -102,14 +140,15 @@ set viminfo+=n$TEMP/_viminfo
 
 " Enable syntax highlighting and filetype detection
 syntax on
+syntax sync fromstart
 filetype plugin indent on
 
 " There is no need for a separate gvimrc file...
 if has('gui_running')
-    set guifont=DejaVu_Sans_Mono:h12,Consolas:h12,Courier_New:h12
+    set guifont=Source_Code_Pro:h12,DejaVu_Sans_Mono:h12,Consolas:h12,Courier_New:h12
     set background=dark
     " colorscheme desert
-    colorscheme base16-tomorrow
+    colorscheme base16-tomorrow-night
     set guioptions-=T
     set guioptions-=L
     set guioptions-=m
@@ -118,8 +157,16 @@ if has('gui_running')
     set keymodel=startsel
 end
 
-" UltiSnips: Put snippets in ~/vimfiles/UltiSnips by default
-let g:UltiSnipsSnippetsDir = "~/vimfiles/UltiSnips"
+" Neosnippet configuration
+" Personal snippet directory
+let g:neosnippet#snippets_directory = "~/vimfiles/snippets"
+" Map <TAB> to expand/jump if possible
+imap <expr><TAB>
+ \ pumvisible() ? "\<C-n>" :
+ \ neosnippet#expandable_or_jumpable() ?
+ \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+ \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 
 " ack.vim: Use ag
 if executable('ag')
@@ -130,79 +177,9 @@ endif
 map <Leader>df :NERDTree %:p:h<CR>
 map <Leader>dc :NERDTree<CR>
 
-" Invoke the Solarized ToggleBG plugin
-"call togglebg#map("")
-
-" Nice mappings
-
 " Move through buffers (from "But She's a Girl)
-"nmap <A-Left> :bp<CR>
-"nmap <A-Right> :bn<CR>
-" Make dot go back to start (from "But She's a Girl)
-"nmap . .`[
-
-" S-F1: Toggle and report hlsearch setting
-"map <S-F1> :set hls!<cr><bar>:echo "HLSearch: " . strpart("OffOn",3*&hlsearch,3)<cr>
-"map <F8> :echo synIDattr(synID(line("."),col("."),1),"name")<CR>
-"map <F9> :call HiDiHi()<CR>
-"function! HiDiHi()
-"    echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"
-"endfunction
-
-" Create a diff between the current contents of the buffer
-" and the version on disk
-"nmap <F10> :w !diff -w -B -c5 -p - % >tmp.diff<CR>:sp tmp.diff<CR>
-
-" Autozoom
-" For autozoom, just set wh=999
-" A macro to toggle autozoom is a bit harder:
-" Note: Capitalisation of g:az affects whether it gets saved in VIMINFO or
-" session files - see :help internal-variables.
-"function! AZ()
-"   let temp = &wh
-"   let &wh = g:az
-"   let g:az = temp
-"endfunction
-"let g:az = 999
-"map ,az :call AZ()<cr>
-"
-"Some useful commands
-"Tidy up XML
-" :%!xmllint --format -
-
-" make < and > in v mode keep highlighting
-"vmap > >gv
-"vmap < <gv
-
-" Edit Vim configuration files
-" function! EV(bang, file)
-"     if a:file == ""
-"         exec "e" . a:bang . ' $VIM\_vimrc'
-"     elseif a:file == "g"
-"         exec "e" . a:bang . ' $VIM\_gvimrc'
-"     else
-"         exec "e" . a:bang . ' $VIM\' . a:file
-"     endif
-" endfunction
-" command! -nargs=? -bang EV call EV(<q-bang>, <q-args>)
-
-" User defined commands - examples for now
-" command! Ddel +,$d
-" command! -nargs=1 -bang -complete=file Rename f <args>|w<bang>
-" function! Allbuf(command)
-"    let l:i = 1
-"    while l:i <= bufnr("$")
-"       if bufexists(l:i)
-"          execute 'buffer '.l:i
-"          execute a:command
-"       endif
-"       let l:i = l:i + 1
-"    endwhile
-" endfunction
-" command! -nargs=+ Allbuf call Allbuf(<q-args>)
-
-" F11 to maximise the window
-"nnoremap <F11> :simalt ~x<CR>
+nmap <Leader><Left> :bp<CR>
+nmap <Leader><Right> :bn<CR>
 
 " Diffsplit this buffer vs the on-disk copy.
 " Could also do this by loading the on-disk version into a new scratch
@@ -224,6 +201,3 @@ map <Leader>dc :NERDTree<CR>
 "     "let &aw = local_aw
 " endfunction
 " command! DT call DiffThis()
-
-" Indent-based folding "like I'd expect it"
-" :set foldexpr='>'.(indent(v:lnum)/&sw+1)
