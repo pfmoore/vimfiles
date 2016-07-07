@@ -46,8 +46,8 @@ NeoBundle 'justinmk/vim-sneak'
 NeoBundle 'jiangmiao/auto-pairs'
 " Auto comment (gc)
 NeoBundle 'tpope/vim-commentary'
-" Various mappings around [] - Not convinced...
-NeoBundle 'tpope/vim-unimpaired'
+" Various mappings around [] - Removed, too intrusive
+" NeoBundle 'tpope/vim-unimpaired'
 
 " Run command and capture output - :Clam
 NeoBundle 'https://bitbucket.org/sjl/clam.vim', {'type': 'hg'}
@@ -79,6 +79,7 @@ NeoBundle 'mileszs/ack.vim'
 " - Syntax checker (scrooloose/syntastic)
 " - Better status line (vim-airline/vim-airline)
 " - Python autocompletion (davidhalter/jedi-vim)
+" - Multiple Cursors (terryma/vim-multiple-cursors)
 
 call neobundle#end()
 
@@ -110,6 +111,13 @@ set wildmenu            " Show a menu when completing on the command line
 
 " Don't require a save when switching buffers
 set hidden              " Hide buffers rather than unloading them
+
+" Line numbers (relative)
+set number
+set relativenumber
+
+" Show the current line
+set cursorline
 
 " Indentation and tabs
 set shiftwidth=4        " indents each 4 characters
@@ -172,6 +180,9 @@ smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
 endif
+
+" Run the current buffer through Python
+command -range=% PP <line1>,<line2>Clam python
 
 " Personal mappings
 map <Leader>df :NERDTree %:p:h<CR>
