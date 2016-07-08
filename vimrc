@@ -12,67 +12,64 @@ set encoding=utf-8
 " Use <SPACE> as the leader. Needs to be at the top, before any mappings.
 let mapleader=" "
 
-" Neobundle configuration
-if has('vim_starting')
-  " Required:
-  set runtimepath+=~/vimfiles/bundle/neobundle.vim/
-endif
-
-" Required:
-call neobundle#begin(expand('~/vimfiles/bundle/'))
-
-" Let NeoBundle manage NeoBundle
-NeoBundleFetch 'Shougo/neobundle.vim'
+call plug#begin()
 
 " Some themes
-NeoBundle 'chriskempson/base16-vim'
-NeoBundle 'sjl/badwolf'
-NeoBundle 'altercation/vim-colors-solarized'
+Plug 'chriskempson/base16-vim'
+" Plug 'sjl/badwolf'
+" Plug 'altercation/vim-colors-solarized'
 " Huge jumbo pack
-" NeoBundle 'flazz/vim-colorschemes'
+" Plug 'flazz/vim-colorschemes'
 
 " File types
-NeoBundle 'PProvost/vim-ps1'
+Plug 'PProvost/vim-ps1'
 
 " Simple utilities
 " ----------------
 " Move lines up and down (A-J/A-k)
-NeoBundle 'matze/vim-move'
+Plug 'matze/vim-move'
 " Surroundings - ds,cs,ys
-NeoBundle 'tpope/vim-surround'
+Plug 'tpope/vim-surround'
 " Sneak mode - sxy (search for 2 chars)
-NeoBundle 'justinmk/vim-sneak'
+Plug 'justinmk/vim-sneak'
 " Smart parentheses
-NeoBundle 'jiangmiao/auto-pairs'
+Plug 'jiangmiao/auto-pairs'
 " Auto comment (gc)
-NeoBundle 'tpope/vim-commentary'
+Plug 'tpope/vim-commentary'
 " Various mappings around [] - Removed, too intrusive
-" NeoBundle 'tpope/vim-unimpaired'
+" Plug 'tpope/vim-unimpaired'
 
 " Run command and capture output - :Clam
-NeoBundle 'https://bitbucket.org/sjl/clam.vim', {'type': 'hg'}
+Plug 'sjl/clam.vim'
 
 " Undo management
-" NeoBundle 'mbbill/undotree'
-" NeoBundle 'sjl/gundo.vim'
+" Plug 'mbbill/undotree'
+" Plug 'sjl/gundo.vim'
 
 " File managers
 " Fuzzy file search - not used (slow on big directories)
-" NeoBundle 'kien/ctrlp.vim'
+" Plug 'kien/ctrlp.vim'
 " Directory viewer window
-NeoBundle 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTree' }
 " Unified selection window (files, buffers, ...) - Too complex?...
-NeoBundle 'Shougo/unite.vim'
+" Plug 'Shougo/unite.vim'
 
 " Snippet managers
-" Needs Python, maybe a bit heavyweight?
-" NeoBundle 'SirVer/UltiSnips'
-NeoBundle 'Shougo/neosnippet.vim'
-NeoBundle 'Shougo/neosnippet-snippets' " Predefined snippets
+Plug 'SirVer/UltiSnips'
+" Plug 'Shougo/neosnippet.vim'
+" Plug 'Shougo/neosnippet-snippets' " Predefined snippets
 
 " Tool integration
-NeoBundle 'mileszs/ack.vim'
-" NeoBundle 'tpope/vim-fugitive.vim'
+Plug 'mileszs/ack.vim'
+" Plug 'tpope/vim-fugitive.vim'
+
+" Temporary additions being tried out.
+" Remove and PlugClean at any time to remove them.
+"Plug 'junegunn/goyo.vim'
+Plug 'junegunn/vim-easy-align'
+"Plug 'junegunn/vim-emoji'
+Plug 'junegunn/vim-peekaboo'
+Plug 'mtth/scratch.vim'
 
 " Things still to look at
 " - Completion (Shougo/neocomplete.vim)
@@ -81,7 +78,7 @@ NeoBundle 'mileszs/ack.vim'
 " - Python autocompletion (davidhalter/jedi-vim)
 " - Multiple Cursors (terryma/vim-multiple-cursors)
 
-call neobundle#end()
+call plug#end()
 
 " Required:
 filetype plugin indent on
@@ -155,8 +152,12 @@ filetype plugin indent on
 if has('gui_running')
     set guifont=Source_Code_Pro:h12,DejaVu_Sans_Mono:h12,Consolas:h12,Courier_New:h12
     set background=dark
-    " colorscheme desert
-    colorscheme base16-tomorrow-night
+    " Set colour scheme, fall back to built in 'desert' scheme
+    try
+        colorscheme base16-tomorrow-night
+    catch /E185/
+        colorscheme desert
+    endtry
     set guioptions-=T
     set guioptions-=L
     set guioptions-=m
@@ -165,16 +166,8 @@ if has('gui_running')
     set keymodel=startsel
 end
 
-" Neosnippet configuration
 " Personal snippet directory
-let g:neosnippet#snippets_directory = "~/vimfiles/snippets"
-" Map <TAB> to expand/jump if possible
-imap <expr><TAB>
- \ pumvisible() ? "\<C-n>" :
- \ neosnippet#expandable_or_jumpable() ?
- \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
- \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+let g:UltiSnipsSnippetsDir = "~/vimfiles/ultisnips"
 
 " ack.vim: Use ag
 if executable('ag')
@@ -187,6 +180,7 @@ command -range=% PP <line1>,<line2>Clam python
 " Personal mappings
 map <Leader>df :NERDTree %:p:h<CR>
 map <Leader>dc :NERDTree<CR>
+map <Leader>fc :e $MYVIMRC<CR>
 
 " Move through buffers (from "But She's a Girl)
 nmap <Leader><Left> :bp<CR>
