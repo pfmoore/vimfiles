@@ -61,7 +61,7 @@ Plug 'SirVer/UltiSnips'
 
 " Tool integration
 Plug 'mileszs/ack.vim'
-" Plug 'tpope/vim-fugitive.vim'
+Plug 'tpope/vim-fugitive' " Being tested
 
 " Temporary additions being tried out.
 " Remove and PlugClean at any time to remove them.
@@ -76,6 +76,7 @@ Plug 'mtth/scratch.vim'
 " - Syntax checker (scrooloose/syntastic)
 " - Better status line (vim-airline/vim-airline)
 " - Python autocompletion (davidhalter/jedi-vim)
+Plug 'davidhalter/jedi-vim' " Being tested
 " - Multiple Cursors (terryma/vim-multiple-cursors)
 
 call plug#end()
