@@ -56,6 +56,7 @@ Plug 'scrooloose/nerdtree', { 'on': 'NERDTree' }
 
 " Snippet managers
 Plug 'SirVer/UltiSnips'
+Plug 'honza/vim-snippets'
 " Plug 'Shougo/neosnippet.vim'
 " Plug 'Shougo/neosnippet-snippets' " Predefined snippets
 
