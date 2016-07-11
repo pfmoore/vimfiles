@@ -131,6 +131,9 @@ set nobackup            " do not keep a backup file
 set nowritebackup       " do not write a backup file at all
 set backupdir=.,$TEMP   " backup files go to current dir or windows temp
 
+" We don't want Ctrl-A and Ctrl-X to assume octal if there's a leading zero
+set nrformats-=octal
+
 set complete=.,w,b,u,i  " Insert-completion
 set suffixes+=.orig     " Complete on these files last
 
