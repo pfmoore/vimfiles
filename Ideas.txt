@@ -1,0 +1,9 @@
+Some Ideas to implement
+=======================
+
+1. Global snippets to start particular file types
+   a. Creates a template file
+   b. Sets filetype in a post-expand hook
+2. Layout functions or maps
+   a. Underline (example at the top of this file)
+3. Filetype chooser (or at least menu / completion for :set ft)
