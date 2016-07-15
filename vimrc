@@ -85,11 +85,6 @@ call plug#end()
 " Required:
 filetype plugin indent on
 
-if !has('vim_starting')
-  " Call on_source hook when reloading .vimrc.
-  call neobundle#call_hook('on_source')
-endif
-
 " General settings
 set nowrap        " Horizontal scrolling rather than displaying lines wrapped
 set showmatch     " Flash on matching brackets
@@ -173,6 +168,12 @@ end
 
 " Personal snippet directory
 let g:UltiSnipsSnippetsDir = "~/vimfiles/ultisnips"
+" Use TAB to expand and jump in snippets
+let g:UltiSnipsExpandTrigger = "<Tab>"
+let g:UltiSnipsListSnippets = "<C-Tab>"
+let g:UltiSnipsJumpForwardTrigger = "<Tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<S-Tab>"
+
 
 " ack.vim: Use ag
 if executable('ag')
