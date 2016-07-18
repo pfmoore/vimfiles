@@ -1,0 +1,9 @@
+snippet argparse "Call argparse" b
+parser = argparse.ArgumentParser(description='${1:Program description}')
+args = parser.parse_args()
+endsnippet
+
+snippet aparg "Add an argument with argparse" b
+parser.add_argument('${1:--arg}',
+                    help='${2:Argument help text}')
+endsnippet
